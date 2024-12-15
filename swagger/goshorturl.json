@@ -1,0 +1,111 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/shorturl/access": {
+      "get": {
+        "operationId": "AccessShortUrlHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AccessShortUrlResponse"
+            }
+          }
+        },
+        "tags": [
+          "shorturl"
+        ]
+      }
+    },
+    "/api/v1/shorturl/create": {
+      "post": {
+        "operationId": "CreateShortUrlHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreatShortUrlResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateShortUrlRequest"
+            }
+          }
+        ],
+        "tags": [
+          "shorturl"
+        ]
+      }
+    },
+    "/api/v1/shorturl/detail": {
+      "get": {
+        "operationId": "DetailShortUrlHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DetailShortUrlResponse"
+            }
+          }
+        },
+        "tags": [
+          "shorturl"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AccessShortUrlRequest": {
+      "type": "object",
+      "title": "AccessShortUrlRequest"
+    },
+    "AccessShortUrlResponse": {
+      "type": "object",
+      "title": "AccessShortUrlResponse"
+    },
+    "CreatShortUrlResponse": {
+      "type": "object",
+      "title": "CreatShortUrlResponse"
+    },
+    "CreateShortUrlRequest": {
+      "type": "object",
+      "title": "CreateShortUrlRequest"
+    },
+    "DetailShortUrlRequest": {
+      "type": "object",
+      "title": "DetailShortUrlRequest"
+    },
+    "DetailShortUrlResponse": {
+      "type": "object",
+      "title": "DetailShortUrlResponse"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

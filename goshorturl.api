@@ -1,0 +1,29 @@
+syntax = "v1"
+
+@server (
+	group:  shorturl
+	prefix: /api/v1
+)
+service goshorturl {
+	@handler AccessShortUrlHandler
+	get /shorturl/access (AccessShortUrlRequest) returns (AccessShortUrlResponse)
+
+	@handler DetailShortUrlHandler
+	get /shorturl/detail (DetailShortUrlRequest) returns (DetailShortUrlResponse)
+
+	@handler CreateShortUrlHandler
+	post /shorturl/create (CreateShortUrlRequest) returns (CreatShortUrlResponse)
+}
+
+type AccessShortUrlRequest {}
+
+type AccessShortUrlResponse {}
+
+type DetailShortUrlRequest {}
+
+type DetailShortUrlResponse {}
+
+type CreateShortUrlRequest {}
+
+type CreatShortUrlResponse {}
+
