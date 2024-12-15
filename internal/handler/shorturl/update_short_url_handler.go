@@ -9,16 +9,16 @@ import (
 	"github.com/colinrs/goshorturl/pkg/httpy"
 )
 
-func DetailShortUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func UpdateShortUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.DetailShortUrlRequest
+		var req types.UpdateShortUrlRequest
 		if err := httpy.Parse(r, &req); err != nil {
 			httpy.ResultCtx(r, w, nil, err)
 			return
 		}
 
-		l := shorturl.NewDetailShortUrlLogic(r.Context(), svcCtx)
-		resp, err := l.DetailShortUrl(&req)
+		l := shorturl.NewUpdateShortUrlLogic(r.Context(), svcCtx)
+		resp, err := l.UpdateShortUrl(&req)
 		if err != nil {
 			httpy.ResultCtx(r, w, nil, err)
 			return

@@ -1,3 +1,24 @@
 Name: goshorturl
 Host: 0.0.0.0
 Port: 8888
+
+Log:
+  Mode: console
+  Encoding: plain
+  Level: debug
+
+DevServer:
+  Enabled: true
+
+Database:
+  Host: 127.0.0.1
+  Port: 3306
+  UserName: root
+  Password: "123456"
+  Database: short
+  MaxIdleConn: 5
+  MaxOpenConn: 10
+  ConnMaxLifeTime: 1800
+
+Redis:
+  Host: 127.0.0.1:6379

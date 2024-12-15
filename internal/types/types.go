@@ -2,19 +2,40 @@
 package types
 
 type AccessShortUrlRequest struct {
+	Url string `form:"url"`
 }
 
 type AccessShortUrlResponse struct {
 }
 
 type CreatShortUrlResponse struct {
+	Id  int    `json:"id"`
+	Url string `json:"url"`
 }
 
 type CreateShortUrlRequest struct {
+	Origin      string `json:"origin"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"` // ISO 8601 格式 格式: "2023-08-15T14:30:00+08:00"
 }
 
 type DetailShortUrlRequest struct {
+	Url string `form:"url"`
 }
 
 type DetailShortUrlResponse struct {
+	Id          int    `json:"id"`
+	Url         string `json:"url"`
+	Origin      string `json:"origin"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"`
+}
+
+type UpdateShortUrlRequest struct {
+}
+
+type UpdateShortUrlResponse struct {
+	Id          int    `json:"id"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"`
 }

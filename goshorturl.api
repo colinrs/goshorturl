@@ -13,17 +13,45 @@ service goshorturl {
 
 	@handler CreateShortUrlHandler
 	post /shorturl/create (CreateShortUrlRequest) returns (CreatShortUrlResponse)
+
+	@handler UpdateShortUrlHandler
+	put /shorturl/update (UpdateShortUrlRequest) returns (UpdateShortUrlResponse)
 }
 
-type AccessShortUrlRequest {}
+type AccessShortUrlRequest {
+	Url string `form:"url"`
+}
 
 type AccessShortUrlResponse {}
 
-type DetailShortUrlRequest {}
+type DetailShortUrlRequest {
+	Url string `form:"url"`
+}
 
-type DetailShortUrlResponse {}
+type DetailShortUrlResponse {
+	Id          int    `json:"id"`
+	Url         string `json:"url"`
+	Origin      string `json:"origin"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"`
+}
 
-type CreateShortUrlRequest {}
+type CreateShortUrlRequest {
+	Origin      string `json:"origin"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"` // ISO 8601 格式 格式: "2023-08-15T14:30:00+08:00"
+}
 
-type CreatShortUrlResponse {}
+type CreatShortUrlResponse {
+	Id  int    `json:"id"`
+	Url string `json:"url"`
+}
+
+type UpdateShortUrlResponse {
+	Id          int    `json:"id"`
+	Description string `json:"description"`
+	ExpireAt    string `json:"expire_at"`
+}
+
+type UpdateShortUrlRequest {}
 

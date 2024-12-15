@@ -28,6 +28,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/shorturl/detail",
 				Handler: shorturl.DetailShortUrlHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/shorturl/update",
+				Handler: shorturl.UpdateShortUrlHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/api/v1"),
 	)

@@ -5,7 +5,7 @@ import (
 
 	"github.com/colinrs/goshorturl/pkg/code"
 
-	validator "github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator/v10"
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
