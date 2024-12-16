@@ -6,6 +6,7 @@ import (
 	"math/big"
 	"net"
 	"runtime/debug"
+	"time"
 )
 
 // 生成随机字符串，长度由用户指定
@@ -72,4 +73,8 @@ func GetOutboundIP() net.IP {
 
 func Stack() string {
 	return string(debug.Stack())
+}
+
+func StrTime(t string) (time.Time, error) {
+	return time.Parse(time.RFC3339, t)
 }

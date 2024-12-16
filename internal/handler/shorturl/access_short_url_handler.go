@@ -1,6 +1,7 @@
 package shorturl
 
 import (
+	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 
 	"github.com/colinrs/goshorturl/internal/logic/shorturl"
@@ -12,6 +13,7 @@ import (
 func AccessShortUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.AccessShortUrlRequest
+		logx.WithContext(r.Context()).Infof("aaaaa %+v", r.RequestURI)
 		if err := httpy.Parse(r, &req); err != nil {
 			httpy.ResultCtx(r, w, nil, err)
 			return

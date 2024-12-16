@@ -22,3 +22,6 @@ Database:
 
 Redis:
   Host: 127.0.0.1:6379
+
+
+ShortUrlDomain: http://localhost:8888
