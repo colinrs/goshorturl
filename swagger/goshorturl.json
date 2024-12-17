@@ -133,7 +133,15 @@
     },
     "AccessShortUrlResponse": {
       "type": "object",
-      "title": "AccessShortUrlResponse"
+      "properties": {
+        "localtion": {
+          "type": "string"
+        }
+      },
+      "title": "AccessShortUrlResponse",
+      "required": [
+        "localtion"
+      ]
     },
     "CreatShortUrlResponse": {
       "type": "object",

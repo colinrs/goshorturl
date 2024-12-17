@@ -22,7 +22,9 @@ type AccessShortUrlRequest {
 	Url string `path:"url"`
 }
 
-type AccessShortUrlResponse {}
+type AccessShortUrlResponse {
+	Localtion string `json:"localtion"`
+}
 
 type DetailShortUrlRequest {
 	Id  uint   `form:"id,optional"`

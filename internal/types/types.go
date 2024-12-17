@@ -6,6 +6,7 @@ type AccessShortUrlRequest struct {
 }
 
 type AccessShortUrlResponse struct {
+	Localtion string `json:"localtion"`
 }
 
 type CreatShortUrlResponse struct {

@@ -1,7 +1,6 @@
 package shorturl
 
 import (
-	"github.com/zeromicro/go-zero/core/logx"
 	"net/http"
 
 	"github.com/colinrs/goshorturl/internal/logic/shorturl"
@@ -13,7 +12,6 @@ import (
 func AccessShortUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.AccessShortUrlRequest
-		logx.WithContext(r.Context()).Infof("aaaaa %+v", r.RequestURI)
 		if err := httpy.Parse(r, &req); err != nil {
 			httpy.ResultCtx(r, w, nil, err)
 			return
@@ -24,6 +22,8 @@ func AccessShortUrlHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpy.ResultCtx(r, w, nil, err)
 			return
 		}
-		httpy.ResultCtx(r, w, resp, err)
+		// 设置 302 重定向和 Location 头
+		w.Header().Set("Location", resp.Localtion)
+		w.WriteHeader(http.StatusFound) // 302 状态码
 	}
 }
