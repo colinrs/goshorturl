@@ -2,11 +2,12 @@ package cache
 
 import (
 	"context"
-	"github.com/zeromicro/go-zero/core/logx"
 	"time"
 
+	"github.com/DmitriyVTitov/size"
 	"github.com/colinrs/goshorturl/pkg/codec"
 	"github.com/dgraph-io/ristretto"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 // RistrettoCacheConfig defines config used to build InMemoryCache backed by Ristretto cache
@@ -150,4 +151,17 @@ func (c *RistrettoCache) Close(_ context.Context) error {
 
 func (c *RistrettoCache) AddPlugin(p Plugin) {
 	c.plugins = append(c.plugins, p)
+}
+
+// CostOne is default for ristretto, the size of item is always=1,
+// So the Ristretto::Capacity will be the total number of cache_keys.
+func CostOne(val interface{}) int64 {
+	return 1
+}
+
+// CostMemoryUsage function can be passed to ristretto's costFunc
+// CostMemoryUsage will return the total bytes usage of val.
+// It is suitable if we want to limit Ristretto by total memory usage
+func CostMemoryUsage(val interface{}) int64 {
+	return int64(size.Of(val))
 }

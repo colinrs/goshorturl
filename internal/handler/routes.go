@@ -15,7 +15,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/shorturl/access/:url",
+				Path:    "/shorturl/access",
 				Handler: shorturl.AccessShortUrlHandler(serverCtx),
 			},
 			{

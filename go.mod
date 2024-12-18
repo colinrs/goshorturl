@@ -3,12 +3,15 @@ module github.com/colinrs/goshorturl
 go 1.22.8
 
 require (
+	github.com/DmitriyVTitov/size v1.5.0
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/bytedance/sonic v1.12.5
 	github.com/dgraph-io/ristretto v0.2.0
 	github.com/go-playground/validator/v10 v10.23.0
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/redis/go-redis/v9 v9.7.0
+	github.com/spaolacci/murmur3 v1.1.0
+	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569
 	github.com/zeromicro/go-zero v1.7.4
 	go.etcd.io/etcd/client/v3 v3.5.17
 	gorm.io/driver/mysql v1.5.7
@@ -56,7 +59,6 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.17 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.17 // indirect

@@ -2,7 +2,7 @@
 package types
 
 type AccessShortUrlRequest struct {
-	Url string `path:"url"`
+	Url string `form:"url"`
 }
 
 type AccessShortUrlResponse struct {

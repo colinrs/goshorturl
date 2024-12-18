@@ -6,7 +6,7 @@ syntax = "v1"
 )
 service goshorturl {
 	@handler AccessShortUrlHandler
-	get /shorturl/access/:url (AccessShortUrlRequest) returns (AccessShortUrlResponse)
+	get /shorturl/access (AccessShortUrlRequest) returns (AccessShortUrlResponse)
 
 	@handler DetailShortUrlHandler
 	get /shorturl/detail (DetailShortUrlRequest) returns (DetailShortUrlResponse)
@@ -19,7 +19,7 @@ service goshorturl {
 }
 
 type AccessShortUrlRequest {
-	Url string `path:"url"`
+	Url string `form:"url"`
 }
 
 type AccessShortUrlResponse {

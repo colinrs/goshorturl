@@ -3,11 +3,11 @@ package manager
 import (
 	"context"
 
-	"github.com/colinrs/goshorturl/internal/model"
 	"github.com/colinrs/goshorturl/internal/repo"
 	"github.com/colinrs/goshorturl/internal/svc"
 
 	"github.com/spaolacci/murmur3"
+	"github.com/teris-io/shortid"
 	"gorm.io/gorm"
 )
 
@@ -33,16 +33,19 @@ func NewUrlManager(ctx context.Context, svc *svc.ServiceContext) UrlManager {
 }
 
 func (s *urlManager) UrlToShortUrl(url string) string {
-	// 需要增加一下判断，如果url已经存在，则直接返回
-	shortUrl := &model.ShortUrl{OriginUrl: url}
-	err := s.shortUrlRepo.FindShortUrl(s.db, shortUrl)
-	if err != nil {
-		return ""
+	url = base62Encode(murmur3.Sum64([]byte(url)))
+	count, err := s.shortUrlRepo.CountShortUrl(s.db, url)
+	if err != nil || count > 0 {
+		var sid string
+		for i := 0; i < 3; i++ {
+			sid, err = shortid.Generate()
+			if err == nil && sid != "" {
+				break
+			}
+		}
+		url = url + sid
 	}
-	if shortUrl.ShortUrl != "" {
-		return shortUrl.ShortUrl
-	}
-	return base62Encode(murmur3.Sum64([]byte(url)))
+	return url
 }
 
 func base62Encode(id uint64) string {

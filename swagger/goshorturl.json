@@ -15,7 +15,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/shorturl/access/{url}": {
+    "/api/v1/shorturl/access": {
       "get": {
         "operationId": "AccessShortUrlHandler",
         "responses": {
@@ -29,13 +29,16 @@
         "parameters": [
           {
             "name": "url",
-            "in": "path",
+            "in": "query",
             "required": true,
             "type": "string"
           }
         ],
         "tags": [
           "shorturl"
+        ],
+        "consumes": [
+          "multipart/form-data"
         ]
       }
     },
@@ -129,7 +132,15 @@
   "definitions": {
     "AccessShortUrlRequest": {
       "type": "object",
-      "title": "AccessShortUrlRequest"
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      },
+      "title": "AccessShortUrlRequest",
+      "required": [
+        "url"
+      ]
     },
     "AccessShortUrlResponse": {
       "type": "object",

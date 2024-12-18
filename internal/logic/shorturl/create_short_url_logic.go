@@ -3,6 +3,10 @@ package shorturl
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"github.com/colinrs/goshorturl/pkg/gosafe"
+	"time"
+
 	"github.com/colinrs/goshorturl/internal/manager"
 	"github.com/colinrs/goshorturl/internal/model"
 	"github.com/colinrs/goshorturl/internal/svc"
@@ -38,25 +42,57 @@ func (l *CreateShortUrlLogic) CreateShortUrl(req *types.CreateShortUrlRequest) (
 	if err != nil {
 		return
 	}
-	shortUrl := &model.ShortUrl{
-		OriginUrl: req.Origin,
-		ShortUrl:  l.urlManager.UrlToShortUrl(req.Origin),
-		Description: sql.NullString{
-			String: req.Description,
-			Valid:  req.Description != "",
-		},
-		ExpireAt: sql.NullTime{
-			Time:  expireAt,
-			Valid: true,
-		},
+	// 需要增加一下判断，如果url已经存在，则直接返回
+	shortUrl := &model.ShortUrl{OriginUrl: req.Origin}
+	_ = l.shortUrlManager.FindShortUrl(shortUrl)
+	var url string
+	var isNew bool
+	var id uint
+	if shortUrl.ShortUrl != "" {
+		url = shortUrl.ShortUrl
+		id = shortUrl.ID
+	} else {
+		isNew = true
+		url = l.urlManager.UrlToShortUrl(req.Origin)
 	}
-	err = l.shortUrlManager.SaveShortUrl(shortUrl)
-	if err != nil {
-		return
+	if isNew {
+		newShortUrl := &model.ShortUrl{
+			OriginUrl: req.Origin,
+			ShortUrl:  url,
+			Description: sql.NullString{
+				String: req.Description,
+				Valid:  req.Description != "",
+			},
+			ExpireAt: sql.NullTime{
+				Time:  expireAt,
+				Valid: true,
+			},
+		}
+		err = l.shortUrlManager.SaveShortUrl(newShortUrl)
+		if err != nil {
+			return
+		}
+		id = newShortUrl.ID
+		shortUrl.ShortUrl = newShortUrl.ShortUrl
+		shortUrl.OriginUrl = newShortUrl.OriginUrl
+		shortUrl.ExpireAt = newShortUrl.ExpireAt
+	}
+	lc := localShortUrl{
+		ShortUrl:  shortUrl.ShortUrl,
+		OriginUrl: shortUrl.OriginUrl,
+		ExpireAt:  shortUrl.ExpireAt.Time,
 	}
 	resp = &types.CreatShortUrlResponse{
-		Id:  shortUrl.ID,
-		Url: shortUrl.ShortUrl,
+		Id: id,
+		Url: fmt.Sprintf("%s/api/v1/shorturl/access?url=%s",
+			l.svcCtx.Config.ShortUrlDomain, url),
 	}
+	gosafe.GoSafe(context.WithoutCancel(l.ctx), func() {
+		err = l.svcCtx.LocalCache.Set(context.WithoutCancel(l.ctx), url, lc, time.Minute*30)
+		if err != nil {
+			l.Errorf("set url:%s,local cache err:%s", url, err.Error())
+		}
+		return
+	})
 	return
 }
