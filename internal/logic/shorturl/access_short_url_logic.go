@@ -9,6 +9,7 @@ import (
 	"github.com/colinrs/goshorturl/internal/svc"
 	"github.com/colinrs/goshorturl/internal/types"
 	"github.com/colinrs/goshorturl/pkg/code"
+	"github.com/colinrs/goshorturl/pkg/gosafe"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -18,7 +19,8 @@ type AccessShortUrlLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 
-	shortUrlManager manager.ShortUrlManager
+	shortUrlManager  manager.ShortUrlManager
+	accessLogManager manager.AccessLogManager
 }
 
 func NewAccessShortUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AccessShortUrlLogic {
@@ -27,7 +29,8 @@ func NewAccessShortUrlLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Ac
 		ctx:    ctx,
 		svcCtx: svcCtx,
 
-		shortUrlManager: manager.NewShortUrlManager(ctx, svcCtx),
+		shortUrlManager:  manager.NewShortUrlManager(ctx, svcCtx),
+		accessLogManager: manager.NewAccessLogManager(ctx, svcCtx),
 	}
 }
 
@@ -71,4 +74,11 @@ type localShortUrl struct {
 	ShortUrl  string    `json:"short_url"`
 	OriginUrl string    `json:"origin_url"`
 	ExpireAt  time.Time `json:"expire_at"`
+}
+
+func (l *AccessShortUrlLogic) SaveAccessLog(accessLog *model.UrlAccessLog) error {
+	gosafe.GoSafe(context.WithoutCancel(l.ctx), func() {
+		_ = l.accessLogManager.Create(accessLog)
+	})
+	return nil
 }
