@@ -12,6 +12,7 @@ type ShortUrlRepo interface {
 	FindShortUrl(db *gorm.DB, shortUrl *model.ShortUrl) error
 	CountShortUrl(db *gorm.DB, url string) (int64, error)
 	UpdateShortUrlByID(db *gorm.DB, id uint, shortUrl *model.ShortUrl) error
+	DelShortUrl(db *gorm.DB, shortUrl *model.ShortUrl) error
 }
 
 type shortUrlRepo struct {
@@ -43,4 +44,8 @@ func (s *shortUrlRepo) CountShortUrl(db *gorm.DB, url string) (int64, error) {
 	err := db.Model(&model.ShortUrl{}).Where("short_url = ?", url).Count(&count).Error
 	return count, err
 
+}
+
+func (s *shortUrlRepo) DelShortUrl(db *gorm.DB, shortUrl *model.ShortUrl) error {
+	return db.WithContext(context.WithoutCancel(s.ctx)).Where(shortUrl).Delete(&model.ShortUrl{}).Error
 }

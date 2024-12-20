@@ -41,6 +41,10 @@ func (l *AccessShortUrlLogic) AccessShortUrl(req *types.AccessShortUrlRequest) (
 		return nil, err
 	}
 	if shortUrl.ExpireAt.UTC().Unix() < time.Now().UTC().Unix() {
+		gosafe.GoSafe(context.WithoutCancel(l.ctx), func() {
+			_ = l.svcCtx.LocalCache.Delete(context.WithoutCancel(l.ctx), req.Url)
+			_ = l.shortUrlManager.DelShortUrl(&model.ShortUrl{ShortUrl: shortUrl.ShortUrl})
+		})
 		return nil, code.UrlNotExist
 	}
 	resp = &types.AccessShortUrlResponse{

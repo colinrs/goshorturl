@@ -2,14 +2,17 @@ package shorturl
 
 import (
 	"context"
+	"time"
+
 	"github.com/colinrs/goshorturl/internal/manager"
 	"github.com/colinrs/goshorturl/internal/model"
-	"gorm.io/gorm"
-
 	"github.com/colinrs/goshorturl/internal/svc"
 	"github.com/colinrs/goshorturl/internal/types"
+	"github.com/colinrs/goshorturl/pkg/code"
+	"github.com/colinrs/goshorturl/pkg/gosafe"
 
 	"github.com/zeromicro/go-zero/core/logx"
+	"gorm.io/gorm"
 )
 
 type DetailShortUrlLogic struct {
@@ -40,6 +43,16 @@ func (l *DetailShortUrlLogic) DetailShortUrl(req *types.DetailShortUrlRequest) (
 	err = l.shortUrlManager.FindShortUrl(shortUrl)
 	if err != nil {
 		return
+	}
+	if shortUrl.ExpireAt.Time.UTC().Unix() < time.Now().UTC().Unix() {
+		gosafe.GoSafe(context.WithoutCancel(l.ctx), func() {
+			_ = l.svcCtx.LocalCache.Delete(context.WithoutCancel(l.ctx), req.Url)
+			err = l.shortUrlManager.DelShortUrl(&model.ShortUrl{ShortUrl: shortUrl.ShortUrl})
+			if err != nil {
+				logx.Errorf("delete short url err: %v", err)
+			}
+		})
+		return nil, code.UrlNotExist
 	}
 	resp = &types.DetailShortUrlResponse{
 		Id:          shortUrl.ID,

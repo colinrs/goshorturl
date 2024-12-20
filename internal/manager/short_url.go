@@ -15,6 +15,8 @@ type ShortUrlManager interface {
 	FindShortUrl(shortUrl *model.ShortUrl) error
 
 	UpdateShortUrlByID(id uint, shortUrl *model.ShortUrl) error
+
+	DelShortUrl(shortUrl *model.ShortUrl) error
 }
 
 type shortUrlManager struct {
@@ -44,4 +46,8 @@ func (s *shortUrlManager) FindShortUrl(shortUrl *model.ShortUrl) error {
 
 func (s *shortUrlManager) UpdateShortUrlByID(id uint, shortUrl *model.ShortUrl) error {
 	return s.shortUrlRepo.UpdateShortUrlByID(s.db, id, shortUrl)
+}
+
+func (s *shortUrlManager) DelShortUrl(shortUrl *model.ShortUrl) error {
+	return s.shortUrlRepo.DelShortUrl(s.db, shortUrl)
 }
